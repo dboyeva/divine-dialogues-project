@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Divine Dialogues</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Titan+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body style="background-color: rgb(236, 236, 236)">
+    <div class="container">
+    <div
+      class="container"
+      style="max-width: 60rem; margin-top: 30px; margin-bottom: 30px"
+    >
+      <h2 class="" style="margin-top: 30px; text-align: center">
+        The Bhagavat Gita Verse Generator
+      </h2>
+      <img
+        src="https://picsum.photos/800/300"
+        class="card-img-top"
+        style="margin-top: 10px; margin-bottom: 20px; border-radius: 20px"
+        alt="randomly generated image"
+      />
+      <div class="card-body">
+        <h5 class="card-title" style="margin-bottom: 10px"><%= original %></h5>
+        <p class="card-text" style="font-style: italic"><%= verse %></p>
+        <p class="card-text"><small><%= verseCommentary %></small></p>
+        <a href="/" class="btn btn-dark d-grid">Generate A Random Verse</a>
+      </div>
+    </div>
+
+    <div
+      class="container mt-5"
+      style="
+        max-width: 60rem;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+      "
+    >
+      <h3 style="text-align: center; margin-bottom: 20px;">Or Select A Specific Verse</h3>
+      <form action="/verse" method="POST" class="mb-4">
+        <div class="mb-3">
+          <label for="chapter" class="form-label">Select Chapter:</label>
+          <select name="chapter" id="chapter" class="form-select">
+            <% for (let i = 1; i <= 18; i++) { %>
+            <option value="<%= i %>"><%= i %></option>
+            <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="verse" class="form-label">Select Verse:</label>
+          <select name="verse" id="verse" class="form-select">
+            <% for (let i = 1; i <= chapterVerseCounts[1]; i++) { %>
+            <option value="<%= i %>"><%= i %></option>
+            <% } %>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-dark d-grid w-100">Get Verse</button>
+      </form>
+    </div>
+  </div>
+
+    <script>
+      const chapterVerseCounts = <%- JSON.stringify(chapterVerseCounts) %>;
+
+          const chapterSelect = document.getElementById("chapter");
+          const verseSelect = document.getElementById("verse");
+
+          chapterSelect.addEventListener("change", () => {
+  const selectedChapter = chapterSelect.value;
+  const maxVerses = chapterVerseCounts[selectedChapter];
+
+  // Clear existing options
+  verseSelect.innerHTML = "";
+
+  // Populate verse dropdown with the correct number of verses
+  for (let i = 1; i <= maxVerses; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i; // Only display the number
+    verseSelect.appendChild(option);
+  }
+          });
+    </script>
+  </body>
+</html>
